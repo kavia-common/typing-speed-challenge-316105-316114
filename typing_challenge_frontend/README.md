@@ -1,82 +1,40 @@
-# Lightweight React Template for KAVIA
+# Typing Speed Challenge (Frontend)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+React SPA for a typing speed game with timer, real-time WPM + accuracy, and a leaderboard.
 
-## Features
+## Run
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
-
-## Getting Started
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+```bash
+npm install
+npm start
 ```
 
-### Components
+Preview defaults to port **3000** (Create React App).
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+## Environment variables (CRA)
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+This app uses Create React App env vars (must be prefixed with `REACT_APP_`):
 
-## Learn More
+- `REACT_APP_API_BASE` (preferred): Base URL for API requests (e.g. `https://api.example.com` or `http://localhost:8080/api`)
+- `REACT_APP_BACKEND_URL` (fallback): Alternate base URL if `REACT_APP_API_BASE` is not set
+- `REACT_APP_FRONTEND_URL`: Optional informational frontend URL (not required)
+- `REACT_APP_WS_URL`: Optional websocket URL (not used yet; reserved for future real-time features)
+- `REACT_APP_NODE_ENV`: Optional; falls back to `NODE_ENV`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+If neither `REACT_APP_API_BASE` nor `REACT_APP_BACKEND_URL` are set, the app uses same-origin `/api`.
 
-### Code Splitting
+### Backend endpoints expected
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The frontend will try these endpoints:
 
-### Analyzing the Bundle Size
+- `GET  {API_BASE}/sentence?difficulty=easy|medium|hard` → `{ "sentence": "..." }`
+- `POST {API_BASE}/scores` → accepts `{ username, wpm, accuracy, difficulty, elapsedSeconds }`
+- `GET  {API_BASE}/leaderboard` → `{ "items": [...] }` (or a compatible array)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Offline / backend unavailable behavior
 
-### Making a Progressive Web App
+If the backend endpoints are not reachable, the UI falls back to:
+- mock sentences (per difficulty)
+- mock leaderboard entries
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This fallback is labeled as `mock` in the UI and includes a TODO to remove when backend is stable.
